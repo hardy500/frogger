@@ -3,8 +3,8 @@
 ########################################################################
 
 # Compiler settings - Can be customized.
-CC = g++
-CXXFLAGS = -std=c++17 -g -pedantic-errors -Wall -I/usr/include/SDL2/ -lsdl2 -lsdl2_image -lsdl2_ttf -lsdl2_mixer
+CC = clang++
+CXXFLAGS = -std=c++17 -g -I./src/include -pedantic-errors -Wall -I/usr/include/SDL2/ -lsdl2 -lsdl2_image -lsdl2_ttf -lsdl2_mixer
 LDFLAGS =
 
 # Makefile settings - Can be customized.
