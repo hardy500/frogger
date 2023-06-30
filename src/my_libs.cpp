@@ -86,3 +86,37 @@ void update_pos(SDL_FPoint& direction, SDL_FRect& rect, Time& time, float speed)
   rect.x += direction.x * speed * time.dt;
   rect.y += direction.y * speed * time.dt;
 }
+
+//----------------------------------------------------------------------------------
+
+void animate(SDL_Renderer* renderer,
+             std::vector<SDL_Texture*> animation,
+             SDL_FRect* rect,
+             float* frameIndex,
+             Time& time) {
+
+    SDL_Texture* currentFrame = nullptr;
+
+    *frameIndex += 10 * time.dt;
+
+    if (*frameIndex >= animation.size()) {
+      *frameIndex = 0;
+    }
+
+    currentFrame = animation[(int)*frameIndex];
+    SDL_RenderCopyF(renderer, currentFrame, NULL, rect);
+}
+
+void create_animation(std::vector<SDL_Texture*>& animation, SDL_Renderer* renderer, std::string path) {
+  for (int frame = 0; frame < 4; frame++) {
+    std::string img_path = path + std::to_string(frame) + ".png";
+    SDL_Surface* surface = IMG_Load(img_path.c_str());
+    if (!surface) {
+      SDL_Log("Failed to load surface: %s", SDL_GetError());
+    }
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    animation.push_back(texture);
+  }
+}
