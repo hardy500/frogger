@@ -37,25 +37,18 @@ void compute_dt(Time* time) {
 void check_kbd_input(const Uint8* keys, SDL_FPoint& point) {
   if (keys[SDL_SCANCODE_RIGHT]) {
     point.x = 1;
+  } else if (keys[SDL_SCANCODE_LEFT]) {
+    point.x = -1;
   } else {
     point.x = 0;
   }
 
-  if (keys[SDL_SCANCODE_LEFT]) {
-    point.x = -1;
-  } else {
-    point.y = 0;
-  }
-
-
   if (keys[SDL_SCANCODE_UP]) {
     point.y = -1;
+  } else if (keys[SDL_SCANCODE_DOWN]) {
+    point.y = 1;
   } else {
     point.y = 0;
-  }
-
-  if (keys[SDL_SCANCODE_DOWN]) {
-    point.y = 1;
   }
 }
 
@@ -74,4 +67,22 @@ void shut_down(SDL_Renderer* renderer, SDL_Window* window) {
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();
+}
+
+//----------------------------------------------------------------------------------
+
+SDL_FPoint normalize(const SDL_FPoint& vector) {
+  SDL_FPoint normalize_vec;
+  float magnitude = std::sqrt(static_cast<float>(vector.x * vector.x + vector.y * vector.y));
+  if (magnitude != 0.0f) {
+    normalize_vec.x = (vector.x / magnitude);
+    normalize_vec.y = (vector.y / magnitude);
+  }
+  return normalize_vec;
+}
+
+void update_pos(SDL_FPoint& direction, SDL_FRect& rect, Time& time, float speed) {
+  direction = normalize(direction);
+  rect.x += direction.x * speed * time.dt;
+  rect.y += direction.y * speed * time.dt;
 }
