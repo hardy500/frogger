@@ -21,5 +21,5 @@ void compute_dt(Time* time);
 
 // ---------------------------------------------------------------------------------
 
-void run_event(SDL_Event* event, bool* running);
+void run_event(SDL_Event* event, bool* running, const Uint8* keys);
 void shut_down(SDL_Renderer* renderer, SDL_Window* window);
