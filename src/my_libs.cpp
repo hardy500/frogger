@@ -34,30 +34,37 @@ void compute_dt(Time* time) {
 
 //----------------------------------------------------------------------------------
 
-void player_move(const Uint8* keys) {
+void check_kbd_input(const Uint8* keys, SDL_FPoint& point) {
   if (keys[SDL_SCANCODE_RIGHT]) {
-    std::cout << "right" << std::endl;
+    point.x = 1;
+  } else {
+    point.x = 0;
   }
 
   if (keys[SDL_SCANCODE_LEFT]) {
-    std::cout << "left" << std::endl;
+    point.x = -1;
+  } else {
+    point.y = 0;
   }
 
+
   if (keys[SDL_SCANCODE_UP]) {
-    std::cout << "up" << std::endl;
+    point.y = -1;
+  } else {
+    point.y = 0;
   }
 
   if (keys[SDL_SCANCODE_DOWN]) {
-    std::cout << "down" << std::endl;
+    point.y = 1;
   }
 }
 
-void run_event(SDL_Event* event, bool* running, const Uint8* keys) {
+void run_event(SDL_Event* event, bool* running, const Uint8* keys, SDL_FPoint& point) {
   while (SDL_PollEvent(event)) {
     if (event->type == SDL_QUIT) {
       *running = false;
     }
-    player_move(keys);
+    check_kbd_input(keys, point);
   }
 }
 
