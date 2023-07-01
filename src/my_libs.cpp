@@ -34,30 +34,39 @@ void compute_dt(Time* time) {
 
 //----------------------------------------------------------------------------------
 
-void check_kbd_input(const Uint8* keys, SDL_FPoint& point) {
+void check_kbd_input(const Uint8* keys, SDL_FPoint& point, std::string& path) {
+  std::string og_path = "/Users/toto/projects/frogger/graphics/player";
   if (keys[SDL_SCANCODE_RIGHT]) {
+    path = og_path + "/right/";
     point.x = 1;
   } else if (keys[SDL_SCANCODE_LEFT]) {
+    path = og_path + "/left/";
     point.x = -1;
   } else {
     point.x = 0;
   }
 
   if (keys[SDL_SCANCODE_UP]) {
+    path = og_path + "/up/";
     point.y = -1;
   } else if (keys[SDL_SCANCODE_DOWN]) {
+    path = og_path + "/down/";
     point.y = 1;
   } else {
     point.y = 0;
   }
 }
 
-void run_event(SDL_Event* event, bool* running, const Uint8* keys, SDL_FPoint& point) {
+void run_event(SDL_Event* event,
+              bool* running,
+              const Uint8* keys,
+              SDL_FPoint& point,
+              std::string& path) {
   while (SDL_PollEvent(event)) {
     if (event->type == SDL_QUIT) {
       *running = false;
     }
-    check_kbd_input(keys, point);
+    check_kbd_input(keys, point, path);
   }
 }
 
@@ -98,13 +107,13 @@ void animate(SDL_Renderer* renderer,
     SDL_Texture* currentFrame = nullptr;
 
     *frameIndex += 10 * time.dt;
-
     if (*frameIndex >= animation.size()) {
       *frameIndex = 0;
     }
 
     currentFrame = animation[(int)*frameIndex];
     SDL_RenderCopyF(renderer, currentFrame, NULL, rect);
+
 }
 
 void create_animation(std::vector<SDL_Texture*>& animation, SDL_Renderer* renderer, std::string path) {
@@ -119,4 +128,9 @@ void create_animation(std::vector<SDL_Texture*>& animation, SDL_Renderer* render
     SDL_FreeSurface(surface);
     animation.push_back(texture);
   }
+}
+
+void destroy_animation(std::vector<SDL_Texture*>& animation) {
+  for (auto a : animation) { SDL_DestroyTexture(a); a = nullptr; }
+  animation.clear();
 }

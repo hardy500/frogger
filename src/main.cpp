@@ -12,9 +12,7 @@ int main() {
   float speed = 200.0f;
   float frame_idx = 0;
   std::string path = "/Users/toto/projects/frogger/graphics/player/right/";
-
   std::vector<SDL_Texture*> animation;
-  create_animation(animation, renderer, path);
 
   Time time;
   init_time(&time);
@@ -26,13 +24,16 @@ int main() {
   bool running = true;
   while (running) {
     compute_dt(&time);
-    run_event(&event, &running, keys, direction);
+
+    create_animation(animation, renderer, path);
+    run_event(&event, &running, keys, direction, path);
     update_pos(direction, rect, time, speed);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
     animate(renderer, animation, &rect, &frame_idx, time);
+    destroy_animation(animation);
 
     SDL_RenderPresent(renderer);
 

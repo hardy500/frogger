@@ -26,7 +26,14 @@ void compute_dt(Time* time);
 
 // ---------------------------------------------------------------------------------
 
-void run_event(SDL_Event* event, bool* running, const Uint8* keys, SDL_FPoint& point);
+void check_kbd_input(const Uint8* keys, SDL_FPoint& point, std::string& path);
+
+void run_event(SDL_Event* event,
+               bool* running,
+               const Uint8* keys,
+               SDL_FPoint& point,
+               std::string& path);
+
 void shut_down(SDL_Renderer* renderer, SDL_Window* window);
 
 // ---------------------------------------------------------------------------------
@@ -36,7 +43,7 @@ SDL_FPoint normalize(const SDL_FPoint& vector);
 void update_pos(SDL_FPoint& direction, SDL_FRect& rect, Time& time, float speed);
 
 // ---------------------------------------------------------------------------------
-
+//
 void animate(SDL_Renderer* renderer,
              std::vector<SDL_Texture*> animation,
              SDL_FRect* rect,
@@ -44,3 +51,4 @@ void animate(SDL_Renderer* renderer,
              Time& time);
 
 void create_animation(std::vector<SDL_Texture*>& animation, SDL_Renderer* renderer, std::string path);
+void destroy_animation(std::vector<SDL_Texture*>& animation);
