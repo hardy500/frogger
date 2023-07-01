@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <random>
+#include <filesystem>
 
 // ---------------------------------------------------------------------------------
 
@@ -52,3 +54,5 @@ void animate(SDL_Renderer* renderer,
 
 void create_animation(std::vector<SDL_Texture*>& animation, SDL_Renderer* renderer, std::string path);
 void destroy_animation(std::vector<SDL_Texture*>& animation);
+std::string getRandomCarName(const std::string& directory);
+SDL_Texture* load_car(std::string path, SDL_Renderer* renderer);

@@ -138,3 +138,33 @@ void destroy_animation(std::vector<SDL_Texture*>& animation) {
   for (auto a : animation) { SDL_DestroyTexture(a); a = nullptr; }
   animation.clear();
 }
+
+
+std::string getRandomCarName(const std::string& directory) {
+  namespace fs = std::filesystem;
+  std::vector<std::string> imgList;
+  for (const auto& entry : fs::directory_iterator(directory)) {
+    if (entry.is_regular_file()) {
+      imgList.push_back(entry.path().string());
+    }
+  }
+
+  if (imgList.empty()) {
+    std::cerr << "No images found in the directory: " << directory << std::endl;
+    return "";
+  }
+
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<size_t> dist(0, imgList.size() - 1);
+  size_t randomIndex = dist(gen);
+
+  return imgList[randomIndex];
+}
+
+SDL_Texture* load_car(std::string path, SDL_Renderer* renderer) {
+  std::string random_path = getRandomCarName(path.c_str());
+  SDL_Texture* texture_cars = IMG_LoadTexture(renderer, random_path.c_str());
+  if (!texture_cars) SDL_Log("Failed to load texture: %s ", SDL_GetError());
+  return texture_cars;
+}
