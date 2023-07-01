@@ -15,7 +15,7 @@ int main() {
   std::vector<SDL_Texture*> animation;
 
   Time time;
-  init_time(&time);
+  init_time(time);
 
   SDL_FRect rect = {600.0f, 400.0f, 50.0f, 50.0f};
   SDL_FPoint direction = {0.0f, 0.0f};
@@ -23,16 +23,16 @@ int main() {
   SDL_Event event;
   bool running = true;
   while (running) {
-    compute_dt(&time);
+    compute_dt(time);
 
     create_animation(animation, renderer, path);
-    run_event(&event, &running, keys, direction, path);
+    run_event(&event, running, keys, direction, path);
     update_pos(direction, rect, time, speed);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    animate(renderer, animation, &rect, &frame_idx, time);
+    animate(renderer, animation, &rect, frame_idx, time, direction);
     destroy_animation(animation);
 
     SDL_RenderPresent(renderer);

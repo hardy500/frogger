@@ -18,18 +18,18 @@ SDL_Window* init_window() {
 
 //----------------------------------------------------------------------------------
 
-void init_time(Time* time) {
-  time->current_time = SDL_GetTicks();
-  time->previous_time = time->current_time;
-  time->dt = 0.0f;
+void init_time(Time& time) {
+  time.current_time = SDL_GetTicks();
+  time.previous_time = time.current_time;
+  time.dt = 0.0f;
 }
 
-void compute_dt(Time* time) {
-  time->previous_time = time->current_time;
-  time->current_time = SDL_GetTicks();
-  time->dt = (time->current_time - time->previous_time) / 1000.0f;
-  if (time->dt > 0.05f)
-    time->dt = 0.05f;
+void compute_dt(Time& time) {
+  time.previous_time = time.current_time;
+  time.current_time = SDL_GetTicks();
+  time.dt = (time.current_time - time.previous_time) / 1000.0f;
+  if (time.dt > 0.05f)
+    time.dt = 0.05f;
 }
 
 //----------------------------------------------------------------------------------
@@ -58,13 +58,13 @@ void check_kbd_input(const Uint8* keys, SDL_FPoint& point, std::string& path) {
 }
 
 void run_event(SDL_Event* event,
-              bool* running,
+              bool& running,
               const Uint8* keys,
               SDL_FPoint& point,
               std::string& path) {
   while (SDL_PollEvent(event)) {
     if (event->type == SDL_QUIT) {
-      *running = false;
+      running = false;
     }
     check_kbd_input(keys, point, path);
   }
@@ -90,7 +90,7 @@ SDL_FPoint normalize(const SDL_FPoint& vector) {
   return normalize_vec;
 }
 
-void update_pos(SDL_FPoint& direction, SDL_FRect& rect, Time& time, float speed) {
+void update_pos(SDL_FPoint& direction, SDL_FRect& rect, Time& time, float& speed) {
   direction = normalize(direction);
   rect.x += direction.x * speed * time.dt;
   rect.y += direction.y * speed * time.dt;
@@ -99,21 +99,25 @@ void update_pos(SDL_FPoint& direction, SDL_FRect& rect, Time& time, float speed)
 //----------------------------------------------------------------------------------
 
 void animate(SDL_Renderer* renderer,
-             std::vector<SDL_Texture*> animation,
+             std::vector<SDL_Texture*>& animation,
              SDL_FRect* rect,
-             float* frameIndex,
-             Time& time) {
+             float& frame_index,
+             Time& time,
+             const SDL_FPoint& vector) {
 
     SDL_Texture* currentFrame = nullptr;
 
-    *frameIndex += 10 * time.dt;
-    if (*frameIndex >= animation.size()) {
-      *frameIndex = 0;
+    float magnitude = std::sqrt(static_cast<float>(vector.x * vector.x + vector.y * vector.y));
+    if (magnitude != 0) {
+      frame_index += 10 * time.dt;
+      if (frame_index >= animation.size())
+        frame_index = 0;
+    } else {
+      frame_index = 0;
     }
 
-    currentFrame = animation[(int)*frameIndex];
+    currentFrame = animation[(int)frame_index];
     SDL_RenderCopyF(renderer, currentFrame, NULL, rect);
-
 }
 
 void create_animation(std::vector<SDL_Texture*>& animation, SDL_Renderer* renderer, std::string path) {
