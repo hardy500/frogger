@@ -34,6 +34,7 @@ void compute_dt(Time& time) {
 
 //----------------------------------------------------------------------------------
 
+
 void check_kbd_input(const Uint8* keys, SDL_FPoint& point, std::string& path) {
   std::string og_path = "/Users/toto/projects/frogger/graphics/player";
   if (keys[SDL_SCANCODE_RIGHT]) {
@@ -92,8 +93,8 @@ SDL_FPoint normalize(const SDL_FPoint& vector) {
 
 void update_pos(SDL_FPoint& direction, SDL_FRect& rect, Time& time, float& speed) {
   direction = normalize(direction);
-  rect.x += direction.x * speed * time.dt;
-  rect.y += direction.y * speed * time.dt;
+  rect.x -= direction.x * speed * time.dt;
+  rect.y -= direction.y * speed * time.dt;
 }
 
 //----------------------------------------------------------------------------------
@@ -162,9 +163,16 @@ std::string getRandomCarName(const std::string& directory) {
   return imgList[randomIndex];
 }
 
+// NOTE: refactor this?
 SDL_Texture* load_car(std::string path, SDL_Renderer* renderer) {
   std::string random_path = getRandomCarName(path.c_str());
   SDL_Texture* texture_cars = IMG_LoadTexture(renderer, random_path.c_str());
   if (!texture_cars) SDL_Log("Failed to load texture: %s ", SDL_GetError());
   return texture_cars;
+}
+
+SDL_Texture* load_bg(std:: string path, SDL_Renderer* renderer) {
+  SDL_Texture* texture_bg = IMG_LoadTexture(renderer, path.c_str());
+  if (!texture_bg) SDL_Log("Failed to load texture: %s ", SDL_GetError());
+  return texture_bg;
 }

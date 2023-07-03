@@ -44,7 +44,7 @@ SDL_FPoint normalize(const SDL_FPoint& vector);
 void update_pos(SDL_FPoint& direction, SDL_FRect& rect, Time& time, float& speed);
 
 // ---------------------------------------------------------------------------------
-//
+
 void animate(SDL_Renderer* renderer,
              std::vector<SDL_Texture*>& animation,
              SDL_FRect* rect,
@@ -55,4 +55,8 @@ void animate(SDL_Renderer* renderer,
 void create_animation(std::vector<SDL_Texture*>& animation, SDL_Renderer* renderer, std::string path);
 void destroy_animation(std::vector<SDL_Texture*>& animation);
 std::string getRandomCarName(const std::string& directory);
+
+// ---------------------------------------------------------------------------------
+
 SDL_Texture* load_car(std::string path, SDL_Renderer* renderer);
+SDL_Texture* load_bg(std:: string path, SDL_Renderer* renderer);
